@@ -2,6 +2,8 @@ TERMUX_PKG_HOMEPAGE=https://www.mozilla.org/en-US/firefox/
 TERMUX_PKG_DESCRIPTION="Open source privacy browser"
 TERMUX_PKG_LICENSE="MPL-2.0"
 TERMUX_PKG_VERSION=83.0
+TERMUX_PKG_MAINTAINER="@termux"
+TERMUX_PKG_SRCURL=https://github.com/mozilla/gecko-dev.git
 NOCONFIGURE=true
 termux_step_get_source() {
 	pip3 install mercurial
