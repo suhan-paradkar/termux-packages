@@ -5,6 +5,7 @@ TERMUX_PKG_VERSION=83.0
 TERMUX_PKG_MAINTAINER="@termux"
 TERMUX_PKG_SRCURL=https://github.com/mozilla/gecko-dev.git
 NOCONFIGURE=true
+TERMUX_HOST_PLATFORM=$TERMUX_ARCH-linux-gnu
 termux_step_get_source() {
 	curl https://hg.mozilla.org/mozilla-central/raw-file/default/python/mozboot/bin/bootstrap.py -O
 	python3 bootstrap.py
