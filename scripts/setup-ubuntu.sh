@@ -40,6 +40,7 @@ PACKAGES+=" libltdl-dev"
 PACKAGES+=" m4"
 PACKAGES+=" pkg-config"
 PACKAGES+=" scons"
+PACKAGES+=" mercurial"
 
 # Used to generate package documentation.
 PACKAGES+=" asciidoc"

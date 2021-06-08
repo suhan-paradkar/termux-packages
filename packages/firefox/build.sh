@@ -6,8 +6,6 @@ TERMUX_PKG_MAINTAINER="@termux"
 TERMUX_PKG_SRCURL=https://github.com/mozilla/gecko-dev.git
 NOCONFIGURE=true
 termux_step_get_source() {
-	pip3 install mercurial
-	echo "export PATH=\"$(python3 -m site --user-base)/bin:$PATH\"" >> ~/.bashrc
 	curl https://hg.mozilla.org/mozilla-central/raw-file/default/python/mozboot/bin/bootstrap.py -O
 	python3 bootstrap.py
 	rm bootstrap.py
