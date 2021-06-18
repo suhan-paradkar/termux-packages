@@ -23,21 +23,6 @@ TERMUX_PKG_SUGGESTS="clang, make, pkg-config, python"
 TERMUX_PKG_RM_AFTER_INSTALL="lib/node_modules/npm/html lib/node_modules/npm/make.bat share/systemtap lib/dtrace"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_HOSTBUILD=true
-# Build fails on i686 with:
-# /tmp/ccRA4O1C.s: Assembler messages:
-# /tmp/ccRA4O1C.s:8: Error: bad register name `%rbp'
-# /tmp/ccRA4O1C.s:9: Error: bad register name `%rsp'
-# /tmp/ccRA4O1C.s:11: Error: bad register name `%rbx'
-# /tmp/ccRA4O1C.s:12: Error: bad register name `%r12'
-# /tmp/ccRA4O1C.s:13: Error: bad register name `%r13'
-# /tmp/ccRA4O1C.s:14: Error: bad register name `%r14'
-# /tmp/ccRA4O1C.s:15: Error: bad register name `%r15'
-# /tmp/ccRA4O1C.s:16: Error: bad register name `%rdx'
-# /tmp/ccRA4O1C.s:17: Error: bad register name `%rsp'
-# /tmp/ccRA4O1C.s:18: Error: bad register name `%r8'
-# /tmp/ccRA4O1C.s:19: Error: bad register name `%rsp'
-# /tmp/ccRA4O1C.s:20: Error: bad register name `%rbp'
-TERMUX_PKG_BLACKLISTED_ARCHES="i686"
 
 termux_step_post_get_source() {
 	# Prevent caching of host build:
