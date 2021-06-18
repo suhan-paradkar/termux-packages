@@ -32,6 +32,7 @@ TERMUX_PKG_RM_AFTER_INSTALL="lib/node_modules/npm/html lib/node_modules/npm/make
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_HOSTBUILD=true
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 # Build fails on i686 with:
 # /tmp/ccRA4O1C.s: Assembler messages:
@@ -49,6 +50,8 @@ TERMUX_PKG_HOSTBUILD=true
 # /tmp/ccRA4O1C.s:20: Error: bad register name `%rbp'
 TERMUX_PKG_BLACKLISTED_ARCHES="i686"
 >>>>>>> 0d9141ad6 (nodejs: disable i686, try x86_64)
+=======
+>>>>>>> b0f5bee7c (enable all arches)
 
 termux_step_post_get_source() {
 	# Prevent caching of host build:
