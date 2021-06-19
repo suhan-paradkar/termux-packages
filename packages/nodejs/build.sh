@@ -33,6 +33,7 @@ TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_HOSTBUILD=true
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 # Build fails on i686 with:
 # /tmp/ccRA4O1C.s: Assembler messages:
@@ -53,6 +54,9 @@ TERMUX_PKG_BLACKLISTED_ARCHES="i686"
 =======
 >>>>>>> b0f5bee7c (enable all arches)
 
+=======
+TERMUX_PKG_EXTRA_MAKE_ARGS+="-m64"
+>>>>>>> 52653e799 (Update build.sh)
 termux_step_post_get_source() {
 	# Prevent caching of host build:
 	rm -Rf $TERMUX_PKG_HOSTBUILD_DIR
