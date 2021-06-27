@@ -7,7 +7,7 @@
 #define ENTNAME                spent
 struct spent_data {};
 #define FALSEP(arg) 0
-#include <nss/nss_files/files-parse.c>
+#include "files-parse.c"
 LINE_PARSER
 (,
  STRING_FIELD (result->sp_namp, ISCOLON, 0);
@@ -57,8 +57,7 @@ LINE_PARSER
        }
    }
  )
-int
-__sgetspent_r (const char *string, struct spwd *resbuf, char *buffer,
+int __sgetspent_r (const char *string, struct spwd *resbuf, char *buffer,
                size_t buflen, struct spwd **result)
 {
   buffer[buflen - 1] = '\0';
@@ -69,4 +68,3 @@ __sgetspent_r (const char *string, struct spwd *resbuf, char *buffer,
   *result = parse_result > 0 ? resbuf : NULL;
   return *result == NULL ? errno : 0;
 }
-weak_alias (__sgetspent_r, sgetspent_r)
