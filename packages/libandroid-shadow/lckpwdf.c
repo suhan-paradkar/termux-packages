@@ -6,8 +6,8 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/file.h>
-#include "sigsetops.h"
-#include "kernel-features.h"
+
+
 
 #define PWD_LOCKFILE "/etc/.pwd.lock"
 
@@ -15,7 +15,7 @@
 
 static int lock_fd = -1;
 
-trylock (static, lock)
+__libc_lock_define_initialized (static, lock);
 
 static void noop_handler (int __sig);
 
@@ -26,7 +26,7 @@ static void noop_handler (int __sig);
         __close (lock_fd);                                                      \
         lock_fd = -1;                                                              \
       }                                                                              \
-    unlock (lock);                                                      \
+    __libc_lock_unlock (lock);                                                      \
     return (code);                                                              \
   } while (0)
 #define RETURN_RESTORE_HANDLER(code)                                              \
@@ -51,7 +51,7 @@ __lckpwdf (void)
   int result;
   if (lock_fd != -1)
     return -1;
-  lock (lock);
+  __lobc_lock_lock_recursive (lock);
   int oflags = O_WRONLY | O_CREAT | O_CLOEXEC;
   lock_fd = __open (PWD_LOCKFILE, oflags, 0600);
   if (lock_fd == -1)
@@ -73,7 +73,7 @@ __lckpwdf (void)
   result = __fcntl (lock_fd, F_SETLKW, &fl);
   RETURN_CLEAR_ALARM (result);
 }
-weak_alias (__lckpwdf, lckpwdf)
+
 int
 __ulckpwdf (void)
 {
@@ -82,15 +82,12 @@ __ulckpwdf (void)
     result = -1;
   else
     {
-      lock (lock);
+      __libc_lock_lock (lock);
       result = __close (lock_fd);
       lock_fd = -1;
-      unlock (lock);
+      __libc_lock_unlock (lock);
     }
   return result;
 }
-weak_alias (__ulckpwdf, ulckpwdf)
-static void
-noop_handler (int sig)
-{
-}
+
+

@@ -114,15 +114,6 @@ typedef struct __libc_lock_recursive_opaque__ __libc_lock_recursive_t;
 # define __libc_lock_unlock_recursive(NAME) \
   __libc_maybe_call (__pthread_mutex_unlock, (&(NAME).mutex), 0)
 #endif
-/* Note that for I/O cleanup handling we are using the old-style
-   cancel handling.  It does not have to be integrated with C++ since
-   no C++ code is called in the middle.  The old-style handling is
-   faster and the support is not going away.  */
-extern void _pthread_cleanup_push_defer (struct _pthread_cleanup_buffer *buffer,
-                                         void (*routine) (void *), void *arg);
-extern void _pthread_cleanup_pop_restore (struct _pthread_cleanup_buffer *buffer,
-                                          int execute);
-/* Start critical region with cleanup.  */
 #define __libc_cleanup_region_start(DOIT, FCT, ARG) \
   { struct _pthread_cleanup_buffer _buffer;                                      \
     int _avail;                                                                      \
@@ -145,9 +136,6 @@ extern void _pthread_cleanup_pop_restore (struct _pthread_cleanup_buffer *buffer
     } else if (DOIT)                                                              \
       _buffer.__routine (_buffer.__arg);                                      \
   }
-/* Hide the definitions which are only supposed to be used inside libc in
-   a separate file.  This file is not present in the installation!  */
-#ifdef _LIBC
+
 # include "libc-lockP.h"
-#endif
 #endif        /* libc-lock.h */

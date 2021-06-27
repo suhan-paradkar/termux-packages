@@ -8,8 +8,15 @@ TERMUX_PKG_BUILD_IN_SRC=true
 
 termux_step_make() {
 	$CC $CFLAGS $CPPFLAGS -I$TERMUX_PKG_BUILDER_DIR -c $TERMUX_PKG_BUILDER_DIR/lckpwdf.c
-	$CC $LDFLAGS -shared shadow.o -o libandroid-shadow.so
-	$AR rcu libandroid-shadow.a shadow.o
+	$CC $CFLAGS $CPPFLAGS -I$TERMUX_PKG_BUILDER_DIR -c $TERMUX_PKG_BUILDER_DIR/fgetspent.c
+	$CC $CFLAGS $CPPFLAGS -I$TERMUX_PKG_BUILDER_DIR -c $TERMUX_PKG_BUILDER_DIR/getspent.c
+	$CC $CFLAGS $CPPFLAGS -I$TERMUX_PKG_BUILDER_DIR -c $TERMUX_PKG_BUILDER_DIR/fgetspent_r.c
+	$CC $CFLAGS $CPPFLAGS -I$TERMUX_PKG_BUILDER_DIR -c $TERMUX_PKG_BUILDER_DIR/getspent_r.c
+	$CC $CFLAGS $CPPFLAGS -I$TERMUX_PKG_BUILDER_DIR -c $TERMUX_PKG_BUILDER_DIR/getspnam.c
+	$CC $CFLAGS $CPPFLAGS -I$TERMUX_PKG_BUILDER_DIR -c $TERMUX_PKG_BUILDER_DIR/getspnam_r.c
+	$CC $LDFLAGS -shared lckpwdf.o -o libandroid-shadow.so
+	$CC $LDFLAGS -shared fgetspent.o -o libandroid-shadow.so
+	$AR rcu libandroid-shadow.a lckpdf.o fgetspent.o
 }
 
 termux_step_make_install() {
