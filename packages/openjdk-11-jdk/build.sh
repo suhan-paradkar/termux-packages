@@ -13,7 +13,7 @@ TERMUX_PKG_HAS_DEBUG=false
 
 termux_step_pre_configure() {
 	unset JAVA_HOME
-
+	sudo apt update && sudo apt install openjdk-11-jdk
 	# Provide fake gcc.
 	mkdir -p $TERMUX_PKG_SRCDIR/wrappers-bin
 	cat <<- EOF > $TERMUX_PKG_SRCDIR/wrappers-bin/android-wrapped-clang
