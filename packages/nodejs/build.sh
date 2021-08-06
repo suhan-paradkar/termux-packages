@@ -4,10 +4,9 @@ TERMUX_PKG_LICENSE="MIT"
 TERMUX_PKG_MAINTAINER="@termux"
 # Note: package build may fail on Github Actions CI due to out-of-memory
 # condition. It should be built locally instead.
-TERMUX_PKG_VERSION=14.15.4
-TERMUX_PKG_REVISION=2
+TERMUX_PKG_VERSION=16.3.0
 TERMUX_PKG_SRCURL=https://nodejs.org/dist/v${TERMUX_PKG_VERSION}/node-v${TERMUX_PKG_VERSION}.tar.xz
-TERMUX_PKG_SHA256=adb7ecf66c74b52a14a08cc22bb0f9aedc157cac1ac93240f7f455e8c8edec9c
+TERMUX_PKG_SHA256=7aab47b82c19702c73b2834a623c3932732a15185fddea14b9ddc710936fac5f
 # Note that we do not use a shared libuv to avoid an issue with the Android
 # linker, which does not use symbols of linked shared libraries when resolving
 # symbols on dlopen(). See https://github.com/termux/termux-packages/issues/462.
@@ -51,11 +50,13 @@ termux_step_host_build() {
 		./configure --prefix $TERMUX_PKG_HOSTBUILD_DIR/icu-installed \
 			--disable-samples \
 			--disable-tests \
+			--shared-zlib \
 			--build=i686-pc-linux-gnu "CFLAGS=-m32" "CXXFLAGS=-m32" "LDFLAGS=-m32"
 	else
 		./configure --prefix $TERMUX_PKG_HOSTBUILD_DIR/icu-installed \
 			--disable-samples \
-			--disable-tests
+			--disable-tests \
+			--shared-zlib
 	fi
 	make -j $TERMUX_MAKE_PROCESSES install
 }
