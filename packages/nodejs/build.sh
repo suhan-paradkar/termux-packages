@@ -73,6 +73,8 @@ termux_step_configure() {
 		termux_error_exit "Unsupported arch '$TERMUX_ARCH'"
 	fi
 
+	LDFLAGS+=" -ldl"
+
 	export GYP_DEFINES="host_os=linux"
 	export CC_host=gcc
 	export CXX_host=g++
