@@ -74,9 +74,6 @@ termux_step_configure() {
 	fi
 
 
-	rm -rf $TERMUX_PKG_SRCDIR/deps/v8/src/heap/base/asm/x64
-	mv $TERMUX_PKG_SRCDIR/deps/v8/src/heap/base/asm/$DEST_CPU $TERMUX_PKG_SRCDIR/deps/v8/src/heap/base/asm/x64
-
 	LDFLAGS+=" -ldl"
 
 	export GYP_DEFINES="host_os=linux"
