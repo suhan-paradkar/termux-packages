@@ -61,16 +61,13 @@ termux_step_host_build() {
 
 termux_step_configure() {
 	local DEST_CPU
-	local V8_CPU
 
 	if [ $TERMUX_ARCH = "arm" ]; then
 		DEST_CPU="arm"
-		V8_CPU="armv7"
 	elif [ $TERMUX_ARCH = "i686" ]; then
 		DEST_CPU="ia32"
 	elif [ $TERMUX_ARCH = "aarch64" ]; then
 		DEST_CPU="arm64"
-		V8_CPU="armv8"
 	elif [ $TERMUX_ARCH = "x86_64" ]; then
 		DEST_CPU="x64"
 	else
@@ -84,7 +81,18 @@ termux_step_configure() {
 	export CXX_host=g++
 	export LINK_host=g++
 
-	if [[ $TERMUX_ARCH = "aarch64" ] || [ $TERMUX_ARCH = "arm" ]]; then
+	if [ $TERMUX_ARCH = "aarch64" ]; then
+		./configure \
+                	--prefix=$TERMUX_PREFIX \
+                	--dest-cpu=$DEST_CPU \
+                	--dest-os=android \
+	                --shared-cares \
+        	        --shared-openssl \
+                	--shared-zlib \
+                	--with-intl=system-icu \
+                	--cross-compiling \
+                	--v8-options="--arm-arch armv8"
+	elif [ $TERMUX_ARCH = "arm" ]; then
 	# See note above TERMUX_PKG_DEPENDS why we do not use a shared libuv.
 		./configure \
 			--prefix=$TERMUX_PREFIX \
@@ -95,7 +103,7 @@ termux_step_configure() {
 			--shared-zlib \
 			--with-intl=system-icu \
 			--cross-compiling \
-			--v8-options="--arm-arch $V8_CPU"
+			--v8-options="--arm-arch armv7"
 	else
 		./configure \
                 	--prefix=$TERMUX_PREFIX \
