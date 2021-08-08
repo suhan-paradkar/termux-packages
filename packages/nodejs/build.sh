@@ -84,28 +84,28 @@ termux_step_configure() {
 	export CXX_host=g++
 	export LINK_host=g++
 
-	if [ $TERMUX_ARCH = "aarch64" ] || [ $TERMUX_ARCH = "arm" ]
+	if [[ $TERMUX_ARCH = "aarch64" ] || [ $TERMUX_ARCH = "arm" ]]; then
 	# See note above TERMUX_PKG_DEPENDS why we do not use a shared libuv.
-	./configure \
-		--prefix=$TERMUX_PREFIX \
-		--dest-cpu=$DEST_CPU \
-		--dest-os=android \
-		--shared-cares \
-		--shared-openssl \
-		--shared-zlib \
-		--with-intl=system-icu \
-		--cross-compiling \
-		--v8-options --arm-arch $V8_CPU
+		./configure \
+			--prefix=$TERMUX_PREFIX \
+			--dest-cpu=$DEST_CPU \
+			--dest-os=android \
+			--shared-cares \
+			--shared-openssl \
+			--shared-zlib \
+			--with-intl=system-icu \
+			--cross-compiling \
+			--v8-options="--arm-arch $V8_CPU"
 	else
-	./configure \
-                --prefix=$TERMUX_PREFIX \
-                --dest-cpu=$DEST_CPU \
-                --dest-os=android \
-                --shared-cares \
-                --shared-openssl \
-                --shared-zlib \
-                --with-intl=system-icu \
-                --cross-compiling
+		./configure \
+                	--prefix=$TERMUX_PREFIX \
+                	--dest-cpu=$DEST_CPU \
+                	--dest-os=android \
+                	--shared-cares \
+               		--shared-openssl \
+                	--shared-zlib \
+                	--with-intl=system-icu \
+                	--cross-compiling
 	fi
 
 	export LD_LIBRARY_PATH=$TERMUX_PKG_HOSTBUILD_DIR/icu-installed/lib
