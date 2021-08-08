@@ -50,7 +50,7 @@ termux_step_host_build() {
 		./configure --prefix $TERMUX_PKG_HOSTBUILD_DIR/icu-installed \
 			--disable-samples \
 			--disable-tests \
-			--build=i686-pc-linux-gnu "CFLAGS=-m32" "CXXFLAGS=-m32" "LDFLAGS=-m32"
+			--build=$TERMUX_ARCH-pc-linux-gnu "CFLAGS=-m32" "CXXFLAGS=-m32" "LDFLAGS=-m32"
 	else
 		./configure --prefix $TERMUX_PKG_HOSTBUILD_DIR/icu-installed \
 			--disable-samples \
@@ -61,21 +61,20 @@ termux_step_host_build() {
 
 termux_step_configure() {
 	local DEST_CPU
+	local V8_CPU
+
 	if [ $TERMUX_ARCH = "arm" ]; then
 		DEST_CPU="arm"
+		V8_CPU="armv7"
 	elif [ $TERMUX_ARCH = "i686" ]; then
 		DEST_CPU="ia32"
 	elif [ $TERMUX_ARCH = "aarch64" ]; then
 		DEST_CPU="arm64"
+		V8_CPU="armv8"
 	elif [ $TERMUX_ARCH = "x86_64" ]; then
 		DEST_CPU="x64"
 	else
 		termux_error_exit "Unsupported arch '$TERMUX_ARCH'"
-	fi
-
-	if [ "$TERMUX_ARCH" != i686 ]; then
-	rm -rf $TERMUX_PKG_SRCDIR/deps/v8/src/heap/base/asm/x64
-	mv $TERMUX_PKG_SRCDIR/deps/v8/src/heap/base/asm/$DEST_CPU $TERMUX_PKG_SRCDIR/deps/v8/src/heap/base/asm/x64
 	fi
 
 	LDFLAGS+=" -ldl"
@@ -85,6 +84,7 @@ termux_step_configure() {
 	export CXX_host=g++
 	export LINK_host=g++
 
+	if [ $TERMUX_ARCH = "aarch64" ] || [ $TERMUX_ARCH = "arm" ]
 	# See note above TERMUX_PKG_DEPENDS why we do not use a shared libuv.
 	./configure \
 		--prefix=$TERMUX_PREFIX \
@@ -95,7 +95,18 @@ termux_step_configure() {
 		--shared-zlib \
 		--with-intl=system-icu \
 		--cross-compiling \
-		--without-bundled-v8
+		--v8-options --arm-arch $V8_CPU
+	else
+	./configure \
+                --prefix=$TERMUX_PREFIX \
+                --dest-cpu=$DEST_CPU \
+                --dest-os=android \
+                --shared-cares \
+                --shared-openssl \
+                --shared-zlib \
+                --with-intl=system-icu \
+                --cross-compiling
+	fi
 
 	export LD_LIBRARY_PATH=$TERMUX_PKG_HOSTBUILD_DIR/icu-installed/lib
 	perl -p -i -e "s@LIBS := \\$\\(LIBS\\)@LIBS := -L$TERMUX_PKG_HOSTBUILD_DIR/icu-installed/lib -lpthread -licui18n -licuuc -licudata@" \
