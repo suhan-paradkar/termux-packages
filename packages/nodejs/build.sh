@@ -90,7 +90,8 @@ termux_step_configure() {
 		--shared-openssl \
 		--shared-zlib \
 		--with-intl=system-icu \
-		--cross-compiling
+		--cross-compiling \
+		--v8-no-asm
 
 	export LD_LIBRARY_PATH=$TERMUX_PKG_HOSTBUILD_DIR/icu-installed/lib
 	perl -p -i -e "s@LIBS := \\$\\(LIBS\\)@LIBS := -L$TERMUX_PKG_HOSTBUILD_DIR/icu-installed/lib -lpthread -licui18n -licuuc -licudata@" \
