@@ -50,7 +50,7 @@ termux_step_host_build() {
 		./configure --prefix $TERMUX_PKG_HOSTBUILD_DIR/icu-installed \
 			--disable-samples \
 			--disable-tests \
-			--build=i686-pc-linux-gnu "CFLAGS=-m32" "CXXFLAGS=-m32" "LDFLAGS=-m32"
+			--build=$TERMUX_ARCH-pc-linux-gnu "CFLAGS=-m32" "CXXFLAGS=-m32" "LDFLAGS=-m32"
 	else
 		./configure --prefix $TERMUX_PKG_HOSTBUILD_DIR/icu-installed \
 			--disable-samples \
@@ -61,6 +61,7 @@ termux_step_host_build() {
 
 termux_step_configure() {
 	local DEST_CPU
+
 	if [ $TERMUX_ARCH = "arm" ]; then
 		DEST_CPU="arm"
 	elif [ $TERMUX_ARCH = "i686" ]; then
@@ -73,11 +74,6 @@ termux_step_configure() {
 		termux_error_exit "Unsupported arch '$TERMUX_ARCH'"
 	fi
 
-	if [ "$TERMUX_ARCH" != i686 ]; then
-	rm -rf $TERMUX_PKG_SRCDIR/deps/v8/src/heap/base/asm/x64
-	mv $TERMUX_PKG_SRCDIR/deps/v8/src/heap/base/asm/$DEST_CPU $TERMUX_PKG_SRCDIR/deps/v8/src/heap/base/asm/x64
-	fi
-
 	LDFLAGS+=" -ldl"
 
 	export GYP_DEFINES="host_os=linux"
@@ -85,16 +81,40 @@ termux_step_configure() {
 	export CXX_host=g++
 	export LINK_host=g++
 
+	if [ $TERMUX_ARCH = "aarch64" ]; then
+		./configure \
+                	--prefix=$TERMUX_PREFIX \
+                	--dest-cpu=$DEST_CPU \
+                	--dest-os=android \
+	                --shared-cares \
+        	        --shared-openssl \
+                	--shared-zlib \
+                	--with-intl=system-icu \
+                	--cross-compiling \
+                	--v8-options="--arm-arch armv8"
+	elif [ $TERMUX_ARCH = "arm" ]; then
 	# See note above TERMUX_PKG_DEPENDS why we do not use a shared libuv.
-	./configure \
-		--prefix=$TERMUX_PREFIX \
-		--dest-cpu=$DEST_CPU \
-		--dest-os=android \
-		--shared-cares \
-		--shared-openssl \
-		--shared-zlib \
-		--with-intl=system-icu \
-		--cross-compiling
+		./configure \
+			--prefix=$TERMUX_PREFIX \
+			--dest-cpu=$DEST_CPU \
+			--dest-os=android \
+			--shared-cares \
+			--shared-openssl \
+			--shared-zlib \
+			--with-intl=system-icu \
+			--cross-compiling \
+			--v8-options="--arm-arch armv7"
+	else
+		./configure \
+                	--prefix=$TERMUX_PREFIX \
+                	--dest-cpu=$DEST_CPU \
+                	--dest-os=android \
+                	--shared-cares \
+               		--shared-openssl \
+                	--shared-zlib \
+                	--with-intl=system-icu \
+                	--cross-compiling
+	fi
 
 	export LD_LIBRARY_PATH=$TERMUX_PKG_HOSTBUILD_DIR/icu-installed/lib
 	perl -p -i -e "s@LIBS := \\$\\(LIBS\\)@LIBS := -L$TERMUX_PKG_HOSTBUILD_DIR/icu-installed/lib -lpthread -licui18n -licuuc -licudata@" \
