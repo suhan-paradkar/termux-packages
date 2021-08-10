@@ -5,8 +5,8 @@ diff -uNr node-v16.6.1/deps/v8/BUILD.gn node-v16.6.1.mod/deps/v8/BUILD.gn
  import("//build/config/sanitizers/sanitizers.gni")
  import("//build_overrides/build.gni")
  
-+v8_target_cpu = getenv("DEST_CPU")
-+target_cpu = getenv("DEST_CPU")
++v8_current_cpu = getenv("DEST_CPU")
++current_cpu = getenv("DEST_CPU")
 +
  if (is_android) {
    import("//build/config/android/rules.gni")
