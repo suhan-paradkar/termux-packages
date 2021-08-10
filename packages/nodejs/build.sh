@@ -90,8 +90,7 @@ termux_step_configure() {
         	        --shared-openssl \
                 	--shared-zlib \
                 	--with-intl=system-icu \
-                	--cross-compiling \
-                	--v8-options="--arm-arch armv8"
+                	--cross-compiling
 	elif [ $TERMUX_ARCH = "arm" ]; then
 	# See note above TERMUX_PKG_DEPENDS why we do not use a shared libuv.
 		./configure \
